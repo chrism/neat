@@ -1,14 +1,20 @@
 [![Bourbon Neat](http://neat.bourbon.io/images/logotype.svg)](http://thoughtbot.com/neat)
 
-[![Gem Version](https://badge.fury.io/rb/neat.png)](http://badge.fury.io/rb/neat) [![Code Climate](https://codeclimate.com/github/thoughtbot/neat.png)](https://codeclimate.com/github/thoughtbot/neat)
+-
 
-**Neat** is an open source fluid grid framework built on top of [Bourbon](http://bourbon.io) with the aim of being easy enough to use out of the box and flexible enough to customize down the road.
+[![Gem Version](http://img.shields.io/gem/v/neat.svg?style=flat)](https://rubygems.org/gems/neat) [![Travis](http://img.shields.io/travis/thoughtbot/neat.svg?style=flat)](https://travis-ci.org/thoughtbot/neat)
+[![Code Climate](http://img.shields.io/codeclimate/github/thoughtbot/neat.svg?style=flat)](https://codeclimate.com/github/thoughtbot/neat)
+[![IRC](http://img.shields.io/badge/freenode-%23bourbon--neat-ae3dd2.svg?style=flat)](#)
+[![Stack Overflow](http://img.shields.io/badge/stack%20overflow-neat-ae3dd2.svg?style=flat)](http://stackoverflow.com/questions/tagged/neat)
 
+Neat is an open source fluid grid framework built on top of [Bourbon](http://bourbon.io) with the aim of being easy enough to use out of the box and flexible enough to customize down the road.
+
+:warning: Neat **1.6.0** requires Sass **3.3.x**. If you are using **libsass** or **sass-rails** use **1.5.1**.
 
 Requirements
 ===
-- Sass 3.2+
-- Bourbon 2.1+
+- Sass 3.3+
+- Bourbon 3.1+
 
 Install Instructions
 ===
@@ -33,8 +39,8 @@ neat install
 In your main stylesheet:
 
 ```sass
-@import "bourbon/bourbon";
-@import "neat/neat";
+@import 'bourbon/bourbon';
+@import 'neat/neat';
 ```
 
 To update Neat files, run:
@@ -69,8 +75,8 @@ bundle update sass
 Within your `application.css.scss` file place the following:
 
 ```sass
-@import "bourbon";
-@import "neat";
+@import 'bourbon';
+@import 'neat';
 ```
 
 Getting started
@@ -79,15 +85,15 @@ Getting started
 First off, if you are planning to override the default grid settings (12 columns), it is recommended to create a `_grid-settings.scss` file for that purpose. Make sure to import it right *before* importing Neat:
 
 ```scss
-@import "bourbon/bourbon"; // or "bourbon" when in Rails
-@import "grid-settings";
-@import "neat/neat"; // or "neat" when in Rails
+@import 'bourbon/bourbon'; // or 'bourbon' when in Rails
+@import 'grid-settings';
+@import 'neat/neat'; // or 'neat' when in Rails
 ```
 
 In your newly created  `_grid-settings.scss`, import `neat-helpers` if you are planning to use `new-breakpoint()`, then define your new variables:
 
 ```scss
-@import "neat/neat-helpers"; // or "neat-helpers" when in Rails
+@import 'neat/neat-helpers'; // or 'neat-helpers' when in Rails
 
 // Change the grid settings
 $column: 90px;
@@ -123,8 +129,10 @@ If the element's parent isn't the top-most container, you need to add the number
 ```scss
 div.container {
   @include outer-container;
+
   div.parent-element {
     @include span-columns(8);
+
     div.element {
       @include span-columns(6 of 8);
     }
@@ -168,15 +176,68 @@ Browser support
 - IE 9+ (Visual grid is IE10 only)
 - IE 8 with [selectivizr](http://selectivizr.com) (no `media()` support)
 
+Frequently asked questions
+==========================
+
+##### How do I use `omega()` in a mobile-first workflow?
+
+Using `omega()` with an `nth-child` pseudo selector in a mobile-first workflow
+will cause the style to be applied to wider-viewport media queries as well. That
+is the cascading nature of CSS.
+
+One solution would be to provide an `omega-reset()` mixin that negates the
+effect of `omega()` on that specific `nth-child` pseudo selector. While this is
+often the most suggested solution, it is also a lazy hack that outputs ugly code
+and can quickly get out of hand in complex layouts. As a general rule, having to
+*undo* CSS styles is a sign of poor stylesheet architecture (More about
+[CSS code smells](http://csswizardry.com/2012/11/code-smells-in-css/)).
+
+The other, more elegant, solution is to use mutually exclusive media queries,
+also referred to as [media-query
+splitting](http://simurai.com/blog/2012/08/29/media-query-splitting/). This
+would guarantee that `omega()` styles are only applied where desired.
+
+```scss
+$first-breakpoint-value: 400px;
+$second-breakpoint-value: 700px;
+$medium-viewport: new-breakpoint(min-width em($first-breakpoint-value) max-width
+em($second-breakpoint-value));
+$large-viewport: new-breakpoint(min-width em($second-breakpoint-value + 1));
+
+.element {
+  @include media($medium-viewport) {
+    @include span-columns(6);
+    @include omega(2n);
+  }
+
+  @include media($large-viewport) {
+    @include span-columns(4);
+    @include omega(3n);
+  }
+}
+```
+
+If, for some reason, you still think that `omega-reset` is the only way you want to go,
+check out Josh Fry's
+[omega-reset](http://joshfry.me/notes/omega-reset-for-bourbon-neat/).
+
+##### Framework X has this feature that Neat seems to be missing. Can you add it?
+
+Unless you [open a pull request](https://github.com/thoughtbot/neat/compare/), the answer is most likely going to be no. Neat is
+lightweight and simple compared to other grid frameworks, and strives to
+remain so. We have plans for adding new features in future versions of the
+framework, but these will be most likely to support new ways of working with
+layouts on the Web, not patches to existing ones.
+
 Links
 =====
 
 - Read the [online documentation](http://neat.bourbon.io/docs/).
 - Add the docset to [Dash](http://kapeli.com/dash) 1.8+ (Preferences **>** Downloads **>** + *Add Docset Feed* **>** `http://neat.bourbon.io/docset/Neat.xml`)
-- Ask questions on [Stack Overflow](http://stackoverflow.com/questions/tagged/neat+bourbon). Don't forget to tag them`bourbon` and `neat`.
+- Ask questions on [Stack Overflow](http://stackoverflow.com/questions/tagged/neat). Don't forget to tag them `bourbon` and `neat`.
 - Suggest features or file bugs in [Issues](https://github.com/thoughtbot/neat/issues).
 - Read the [contribution guidelines](https://github.com/thoughtbot/neat/blob/master/CONTRIBUTING.md).
-- Say hi to [@kaishin](https://twitter.com/kaishin) and [@kylefiedler](https://twitter.com/kylefiedler).
+- Join `#bourbon-neat` on `irc.freenode.net`.
 
 
 Credits & License
@@ -185,5 +246,6 @@ Credits & License
 ![thoughtbot](http://thoughtbot.com/images/tm/logo.png)
 
 Bourbon is maintained and funded by [thoughtbot, inc](http://thoughtbot.com/). Follow [@thoughtbot](http://twitter.com/thoughtbot) on Twitter.
+Tweet your questions or suggestions to [@bourbonsass](https://twitter.com/bourbonsass) and while you’re at it follow us too.
 
-Bourbon Neat is Copyright © 2012-2013 thoughtbot. It is free software, and may be redistributed under the terms specified in the LICENSE file.
+Bourbon Neat is Copyright © 2012-2014 thoughtbot. It is free software, and may be redistributed under the terms specified in the LICENSE file.
