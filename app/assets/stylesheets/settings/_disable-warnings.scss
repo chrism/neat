@@ -1,10 +1,10 @@
 /**
- * Disable all deprecation warnings. Defaults to `false`. Set with a `!global` flag.
+ * Disable all deprecation warnings. Defaults to `false`. Set with a `` flag.
  *
  * @type Bool
  */
 
-$disable-warnings: false !default;
+$disable-warnings: false ;
 
 @mixin -neat-warn($message) {
   @if $disable-warnings == false {

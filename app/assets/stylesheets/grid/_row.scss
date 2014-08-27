@@ -3,7 +3,7 @@
     @include -neat-warn("The $direction argument will be deprecated in future versions in favor of the direction(){...} mixin.");
   }
 
-  $layout-direction: $direction !global;
+  $layout-direction: $direction ;
 
   @if $display != default {
     @include -neat-warn("The $display argument will be deprecated in future versions in favor of the display(){...} mixin.");
@@ -13,13 +13,13 @@
     display: table;
     @include fill-parent;
     table-layout: fixed;
-    $container-display-table: true !global;
+    $container-display-table: true ;
   }
 
   @else {
     @include clearfix;
     display: block;
-    $container-display-table: false !global;
+    $container-display-table: false ;
   }
 }
 

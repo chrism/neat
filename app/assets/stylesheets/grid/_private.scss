@@ -1,9 +1,9 @@
-$parent-columns: $grid-columns !default;
+$parent-columns: $grid-columns ;
 $fg-column: $column;
 $fg-gutter: $gutter;
 $fg-max-columns: $grid-columns;
-$container-display-table: false !default;
-$layout-direction: nil !default;
+$container-display-table: false ;
+$layout-direction: nil ;
 
 @function flex-grid($columns, $container-columns: $fg-max-columns) {
   $width: $columns * $fg-column + ($columns - 1) * $fg-gutter;
@@ -22,9 +22,9 @@ $layout-direction: nil !default;
 
 @function get-parent-columns($columns) {
   @if $columns != $grid-columns {
-    $parent-columns: $columns !global;
+    $parent-columns: $columns ;
   } @else {
-    $parent-columns: $grid-columns !global;
+    $parent-columns: $grid-columns ;
   }
 
   @return $parent-columns;
